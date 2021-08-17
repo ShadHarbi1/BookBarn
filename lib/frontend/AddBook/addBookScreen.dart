@@ -31,10 +31,9 @@ class AddBook extends StatefulWidget {
 
 class _AddBookState extends State<AddBook> {
   ApiServices apiServices = ApiServices();
-  File _file;
-  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  //File _file;
 
-  Future cameraPicker() async {
+  /*  Future cameraPicker() async {
     final myfile = await ImagePicker().pickImage(source: ImageSource.camera);
     setState(() {
       _file = File(myfile.path);
@@ -51,7 +50,7 @@ class _AddBookState extends State<AddBook> {
     print(imageName); // i need this
   }
 
-  String state = "";
+  String state = ""; */
 
   @override
   Widget build(BuildContext context) {

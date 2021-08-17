@@ -50,13 +50,13 @@ class ApiServices extends ChangeNotifier {
     }
   }
 
-  PostStatus _status = PostStatus.UnSent;
+/*   PostStatus _status = PostStatus.UnSent;
 
   final dio = Dio();
 
   PostStatus get status => _status;
 
-  final url = "https://bookstore-31351.herokuapp.com/api/v1/posts";
+  final url = "https://bookstore-31351.herokuapp.com/api/v1/posts"; */
 /* 
   Future<bool> addBook2(String title, String content, String address,
       String category, String price) async {
@@ -99,9 +99,9 @@ class ApiServices extends ChangeNotifier {
   } */
 }
 
-enum PostStatus {
+/* enum PostStatus {
   UnSent,
   Sending,
   Fail,
   Sent,
-}
+} */

@@ -1,5 +1,3 @@
-import 'package:book_barn/backend/models/user.dart';
-
 class Post {
   String author;
   String user;

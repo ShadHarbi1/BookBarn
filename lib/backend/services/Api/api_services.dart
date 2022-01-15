@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:book_barn/backend/controllers/ApiRequests/api_error_handling.dart';
 import 'package:book_barn/backend/models/posts.dart';
@@ -9,6 +10,8 @@ import 'package:either_option/either_option.dart';
 import 'package:dio/dio.dart';
 
 class ApiServices extends ChangeNotifier {
+  File _file;
+
   Future<Either<String, List<Post>>> getPostsList() async {
     var url =
         Uri.tryParse("https://bookstore-31351.herokuapp.com/api/v1/posts");
@@ -24,84 +27,71 @@ class ApiServices extends ChangeNotifier {
   }
 
   Future addBook(Post post) async {
-    final apiUrl =
-        Uri.parse("https://bookstore-31351.herokuapp.com/api/v1/posts");
+    final apiUrl = "https://bookstore-31351.herokuapp.com/api/v1/posts";
     String token = await AuthProvider().getToken();
 
-    Map<String, dynamic> data = {
+    FormData formData = FormData.fromMap({
       "title": post.title,
       "content": post.content,
       "address": post.address,
       "price": post.price,
-    };
+    });
 
-    final response = await http.post(apiUrl,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-          'Authorization': 'Bearer $token',
-        },
-        body: data);
+    final response = await Dio().post(apiUrl,
+        options: Options(
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+            'Authorization': 'Bearer $token',
+          },
+        ),
+        data: formData);
     if (response.statusCode == 201) {
-      print(response);
-      return response.body;
+      final responseBody = response.data["data"];
+      storeBookData(responseBody);
+
+      return response.data;
     } else {
       throw Exception('Failed to load data');
     }
   }
 
-/*   PostStatus _status = PostStatus.UnSent;
-
-  final dio = Dio();
-
-  PostStatus get status => _status;
-
-  final url = "https://bookstore-31351.herokuapp.com/api/v1/posts"; */
-/* 
-  Future<bool> addBook2(String title, String content, String address,
-      String category, String price) async {
+  Future bookPhotoUplaod() async {
+    if (_file == null) return null;
+    String base64 = base64Encode(_file.readAsBytesSync());
+    String image = _file.path.split('/').last;
     String token = await AuthProvider().getToken();
-    _status = PostStatus.Sending;
-    Map body = {
-      "title": title,
-      "content": content,
-      "address": address,
-      "category": category,
-      "price": price,
-    };
+    String id = await getBookID();
 
-    final response = await dio.post(url,
-        data: body,
+    final apiUrl =
+        "https://bookstore-31351.herokuapp.com/api/v1/posts/$id/photo";
+
+    FormData formData = FormData.fromMap({
+      "file": base64,
+    });
+    var response = await Dio().put(apiUrl,
+        data: formData,
         options: Options(headers: {
           "Accept": "application/json",
           "Content-Type": "application/x-www-form-urlencoded",
           'Authorization': 'Bearer $token',
         }));
-    if (response.statusCode == 201) {
-      Map apiResponse = response.data;
-      print(apiResponse);
-      _status = PostStatus.Sent;
-      notifyListeners();
-      return true;
+    if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      print(response.statusMessage);
     }
-    if (response.statusCode == 401 || response.statusCode == 400) {
-      _status = PostStatus.Fail;
-      // Alert dialog
+  }
 
-      notifyListeners();
-      return false;
-    }
-    _status = PostStatus.Fail;
-    // Alert dialog
+  storeBookData(response) async {
+    SharedPreferences storage = await SharedPreferences.getInstance();
+    await storage.setString('id', response['_id']);
+  }
 
-    notifyListeners();
-    return false;
-  } */
+  Future<String> getBookID() async {
+    SharedPreferences storage = await SharedPreferences.getInstance();
+    String id = storage.getString('id');
+    print(id);
+    return id;
+  }
 }
-
-/* enum PostStatus {
-  UnSent,
-  Sending,
-  Fail,
-  Sent,
-} */

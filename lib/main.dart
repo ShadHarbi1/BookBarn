@@ -3,6 +3,8 @@ import 'package:book_barn/backend/functions/checkAuthentication.dart';
 import 'package:book_barn/backend/services/Api/api_services.dart';
 import 'package:book_barn/backend/services/Authentication/authentication_service.dart';
 import 'package:book_barn/frontend/AddBook/addBookScreen.dart';
+import 'package:book_barn/frontend/AddBook/uplaodPhotoScreen.dart';
+import 'package:book_barn/frontend/Home/homeSreen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -25,7 +27,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: CheckAuth(),
+        home: HomeScreen(),
       ),
     );
   }

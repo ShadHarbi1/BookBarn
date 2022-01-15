@@ -1,5 +1,9 @@
+import 'package:book_barn/backend/models/user.dart';
+
 class Post {
+  String author;
   String user;
+
   String id;
   String title;
   String content;
@@ -16,9 +20,11 @@ class Post {
       this.address,
       this.price,
       this.id,
-      this.photo});
+      this.photo,
+      this.author});
 
   Post.fromJson(Map<String, dynamic> json) {
+    author = json['author'];
     id = json['_id'];
     title = json['title'];
     price = json['price'];
@@ -31,6 +37,7 @@ class Post {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['author'] = this.author;
     data['id'] = this.id;
     data['title'] = this.title;
     data['price'] = this.price;

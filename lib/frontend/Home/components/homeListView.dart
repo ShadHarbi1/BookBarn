@@ -17,6 +17,8 @@ Widget spendingsListWidget(PostsDataProvider data, BuildContext context) {
           shrinkWrap: true,
           itemCount: reversedList.length,
           itemBuilder: (context, index) {
+            var photoName = reversedList[index].photo;
+
             return GestureDetector(
               child: Container(
                 margin: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 20),
@@ -29,7 +31,7 @@ Widget spendingsListWidget(PostsDataProvider data, BuildContext context) {
                     child: InkWell(
                       onTap: () {
                         print(
-                          reversedList[index].id,
+                          reversedList[index].photo,
                         );
                       },
                       child: Row(
@@ -41,7 +43,7 @@ Widget spendingsListWidget(PostsDataProvider data, BuildContext context) {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    reversedList[index].photo,
+                                    "https://bookstore-31351.herokuapp.com/uploads/$photoName",
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -61,18 +63,18 @@ Widget spendingsListWidget(PostsDataProvider data, BuildContext context) {
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    AutoSizeText(
+                                    /* AutoSizeText(
                                       reversedList[index].category,
                                       style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.grey[500],
                                           fontWeight: FontWeight.w300),
-                                    ),
+                                    ), */
                                     SizedBox(
                                       height: 20,
                                     ),
                                     AutoSizeText(
-                                      reversedList[index].user,
+                                      reversedList[index].author,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18),

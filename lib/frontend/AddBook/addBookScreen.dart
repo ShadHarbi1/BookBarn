@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:book_barn/backend/models/posts.dart';
 import 'package:book_barn/backend/services/Api/api_services.dart';
+import 'package:book_barn/frontend/AddBook/uplaodPhotoScreen.dart';
 import 'package:book_barn/frontend/Widgets/alertDialog.dart';
 import 'package:book_barn/frontend/Widgets/progressIndicator.dart';
 import 'package:http/http.dart' as http;
@@ -57,7 +58,7 @@ class _AddBookState extends State<AddBook> {
     TextEditingController title = TextEditingController();
     TextEditingController content = TextEditingController();
     TextEditingController address = TextEditingController();
-    TextEditingController category = TextEditingController();
+    TextEditingController categoryController = TextEditingController();
     TextEditingController price = TextEditingController();
     final _formKey = GlobalKey<FormState>();
 
@@ -73,11 +74,12 @@ class _AddBookState extends State<AddBook> {
             content: content.text.trim().toString(),
             address: address.text.trim().toString(),
             price: price.text.trim().toString(),
+            category: categoryController.text.trim().toString(),
           ));
 
           print("Book Added!!");
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => HomeScreen()),
+              MaterialPageRoute(builder: (context) => UploudImageScreen()),
               (Route<dynamic> route) => false);
           dissmissProgressIndicator(context);
         } else {
@@ -201,12 +203,13 @@ class _AddBookState extends State<AddBook> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    /* RoundedInputField(
+                    /*  RoundedInputField(
+                      controller: categoryController,
                       validate: (value) {
                         if (value.isEmpty) {
                           return 'Please enter a name';
                         }
-                        category = value.trim();
+                        //categoryController = value.trim();
                       },
                       icon: Icon(
                         Icons.category_rounded,
